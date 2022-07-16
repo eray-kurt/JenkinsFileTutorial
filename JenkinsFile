@@ -1,3 +1,5 @@
+CODE_CHANGES = getGitChanges()
+
 pipeline { #top level
 
   agent any #where to execute
@@ -6,6 +8,12 @@ pipeline { #top level
   
       stage("build") {
       
+          when {
+              expression {
+                  BRANCH_NAME == 'dev' && CODE_CHANGES == true
+              }
+          }
+          
           steps {
               echo 'building the application...'
           }
@@ -14,6 +22,11 @@ pipeline { #top level
       
       stage("test") {
       
+          when {
+              expression {
+                  BRANCH_NAME == 'dev' || BRANCH_NAME == 'master'
+              }
+          }
           steps {
               echo 'testing the application...'
           }
@@ -28,5 +41,16 @@ pipeline { #top level
           }
           
       }
+      post {
       
+          always {
+              //
+          }
+          success {
+              //
+          }
+          failure {
+          //
+          }
+      }
   }
