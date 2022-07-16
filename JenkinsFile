@@ -3,6 +3,10 @@ CODE_CHANGES = getGitChanges()
 pipeline { #top level
 
   agent any #where to execute
+  environment {
+      NEW_VERSION = '1.2'
+      SERVER_CREDENTIALS = credentials('') # need credentials binding in jenkins gui
+  }
   
   stages { #where the "work" happens
   
@@ -16,6 +20,7 @@ pipeline { #top level
           
           steps {
               echo 'building the application...'
+              echo 'building version ${NEW_VERSION}'
           }
           
       }
@@ -29,6 +34,7 @@ pipeline { #top level
           }
           steps {
               echo 'testing the application...'
+              echo 'testing version ${NEW_VERSION}'
           }
           
       }
@@ -38,6 +44,9 @@ pipeline { #top level
       
           steps {
               echo 'deploying the application...'
+              withCredentials([
+                  usernamePassword(
+              ])
           }
           
       }
